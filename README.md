@@ -1,68 +1,206 @@
 # Network Intrusion Detection & Anomaly Monitoring System
 
-A student-friendly cybersecurity project that combines:
+A network security application for detecting malicious traffic and unusual network behavior from network-flow data.
 
-- **XGBoost** for known network-attack classification
-- **PyTorch Autoencoder** for anomaly detection
-- **Streamlit + Plotly** for an interactive security dashboard
-- **CIC-IDS2017** as the intended real cybersecurity dataset
+The system combines an **XGBoost multi-class classifier** for identifying known attack patterns with a **PyTorch Autoencoder** for detecting traffic that differs from learned benign behavior. Results are presented through an interactive **Streamlit dashboard** with traffic-class distributions, anomaly scores, and risk levels.
 
-> The bundled synthetic demo data is only for checking that the complete code pipeline runs on your laptop. Final experiments and resume metrics should come from the real CIC-IDS2017 data.
+---
 
-## What the project does
+## Overview
 
-1. Reads network-flow records from CSV.
-2. Cleans and selects numeric traffic features.
-3. Trains XGBoost to classify known traffic/attack families.
-4. Trains an autoencoder only on BENIGN traffic so unusual records can be flagged by reconstruction error.
-5. Combines classifier + anomaly signals into LOW/MEDIUM/HIGH risk.
-6. Shows results in a Streamlit dashboard and exports predictions.
+Traditional intrusion detection systems often rely on known attack signatures. This project uses two complementary approaches:
+
+- **XGBoost** classifies traffic into known network attack categories.
+- **Autoencoder-based anomaly detection** identifies unusual traffic patterns based on reconstruction error.
+- A combined risk layer assigns **LOW, MEDIUM, or HIGH** risk levels.
+- A Streamlit dashboard allows CSV-based traffic analysis and visualizes the results.
+
+The project was evaluated using the **CIC-IDS2017** network intrusion detection dataset.
+
+---
+
+## System Workflow
+
+```text
+Network Flow CSV
+       |
+       v
+Data Cleaning & Feature Processing
+       |
+       +-----------------------+
+       |                       |
+       v                       v
+    XGBoost              Autoencoder
+       |                       |
+Known Attack              Anomaly Score
+Classification                 |
+       |                       |
+       +-----------+-----------+
+                   |
+                   v
+              Risk Analysis
+                   |
+                   v
+          Streamlit Dashboard
+```
+
+---
+
+## Features
+
+- Multi-class network attack classification
+- Anomaly detection using a neural-network autoencoder
+- Analysis of CIC-IDS2017 network-flow CSV files
+- Automatic preprocessing of numerical traffic features
+- LOW / MEDIUM / HIGH risk assignment
+- Attack distribution visualization
+- Anomaly-score monitoring
+- CSV upload and analysis through Streamlit
+- Exportable prediction results
+
+---
+
+## Detected Traffic Classes
+
+The preprocessing pipeline groups CIC-IDS2017 labels into the following broader classes:
+
+- BENIGN
+- Bot
+- BruteForce
+- DDoS
+- DoS
+- Heartbleed
+- Infiltration
+- PortScan
+- WebAttack
+
+Only classes available in the processed dataset are used during training.
+
+---
+
+## Model Performance
+
+The final model was trained on prepared **CIC-IDS2017** network-flow data.
+
+| Metric | Result |
+|---|---:|
+| Processed records | 27,686 |
+| Numerical features | 68 |
+| Traffic classes | 9 |
+| XGBoost Accuracy | **96.86%** |
+| XGBoost Macro F1 | **92.98%** |
+| XGBoost Macro Precision | **93.09%** |
+| XGBoost Macro Recall | **93.86%** |
+| Autoencoder Anomaly Precision | **97.79%** |
+| Autoencoder Anomaly Recall | **19.46%** |
+
+The XGBoost classifier performs the primary known-attack classification. The autoencoder is used as an additional anomaly signal and is intentionally more conservative at the current threshold.
+
+---
 
 ## Project Demo
 
 ### Network Traffic Analysis Dashboard
 
-<p align="center">
-  <img src="Screenshots/ddos_analysis_dashboard.png" width="900">
-</p>
+![Network Traffic Analysis Dashboard](Screenshots/ddos_analysis_dashboard.png)
 
-<p align="center">
-  <i>
-    Analysis of CIC-IDS2017 DDoS traffic showing attack classifications,
-    anomaly detection, and risk distribution.
-  </i>
-</p>
+The dashboard above shows analysis of CIC-IDS2017 DDoS traffic, including predicted traffic classes, anomaly detection, and overall risk distribution.
 
-### Model Performance
+### Model Summary
 
-<p align="center">
-  <img src="Screenshots/model_summary.png" width="850">
-</p>
+![Model Summary](Screenshots/model_summary.png)
 
-<p align="center">
-  <i>
-    Performance summary of the trained XGBoost classifier and
-    PyTorch autoencoder on the CIC-IDS2017 dataset.
-  </i>
-</p>
+The model summary displays the training configuration and evaluation results obtained from the processed CIC-IDS2017 dataset.
 
-## Folder structure
+---
+
+## Example Analysis
+
+A CIC-IDS2017 DDoS traffic CSV containing **225,745 network-flow records** was analyzed through the dashboard.
+
+The system identified:
+
+- **128,609** records as known attacks
+- **42,135** records as autoencoder anomalies
+- **128,328** records as high-risk traffic
+
+The traffic distribution was dominated by **DDoS** and **BENIGN** flows, which is consistent with an attack-day capture containing both malicious and legitimate traffic.
+
+---
+
+## Technologies Used
+
+- **Python**
+- **XGBoost**
+- **PyTorch**
+- **Scikit-learn**
+- **Pandas**
+- **NumPy**
+- **Streamlit**
+- **Plotly**
+- **Joblib**
+
+---
+
+## Dataset
+
+This project uses the **CIC-IDS2017** dataset developed by the Canadian Institute for Cybersecurity at the University of New Brunswick.
+
+Dataset page:
+
+https://www.unb.ca/cic/datasets/ids-2017.html
+
+For this project, download the:
+
+```text
+MachineLearningCSV.zip
+```
+
+Extract the CSV files and place them inside:
+
+```text
+data/raw/
+```
+
+The raw dataset is intentionally not included in this repository because of its size.
+
+---
+
+## Project Structure
 
 ```text
 network_intrusion_project/
+│
 ├── app.py
 ├── config.py
 ├── requirements.txt
+│
 ├── setup_windows.bat
-├── run_demo.bat
 ├── run_dashboard.bat
+├── run_demo.bat
 ├── train_real_cicids.bat
+├── repair_and_train.bat
+│
 ├── data/
-│   ├── raw/          # Put extracted CIC-IDS2017 MachineLearningCSV files here
-│   ├── processed/    # Prepared balanced dataset is written here
-│   └── demo/         # Synthetic pipeline-check data
-├── models/           # Trained model artifacts
-├── reports/          # Metrics/confusion matrix/predictions
+│   ├── raw/
+│   │   └── README.md
+│   ├── processed/
+│   └── demo/
+│
+├── models/
+│   ├── autoencoder.pt
+│   ├── xgboost_classifier.joblib
+│   ├── scaler.joblib
+│   ├── label_encoder.joblib
+│   ├── feature_columns.json
+│   └── anomaly_threshold.json
+│
+├── reports/
+│
+├── Screenshots/
+│   ├── ddos_analysis_dashboard.png
+│   └── model_summary.png
+│
 └── src/
     ├── common.py
     ├── generate_demo_data.py
@@ -72,118 +210,191 @@ network_intrusion_project/
     └── predict_csv.py
 ```
 
-## Recommended Windows setup
+---
 
-Use **Python 3.11 (64-bit)**. This is a conservative choice for compatibility with the project libraries.
+## Installation
 
-### First-time setup
+### 1. Clone the repository
 
-1. Install Python 3.11 from https://www.python.org/downloads/ if needed.
-2. During installation enable **Add Python to PATH**.
-3. Extract this project ZIP.
-4. Double-click `setup_windows.bat`.
-5. After installation finishes, you can double-click `run_dashboard.bat` to open the bundled verified demo model immediately, or `run_demo.bat` to reproduce training yourself.
+```bash
+git clone https://github.com/ManikaR26/network-intrusion-detection.git
+cd network-intrusion-detection
+```
 
-`run_demo.bat` will:
-- create synthetic demo traffic,
-- train XGBoost,
-- train the autoencoder,
-- save all model files,
-- start the Streamlit dashboard.
+### 2. Create a virtual environment
 
-Your browser should open at a local address such as `http://localhost:8501`.
+On Windows:
 
-## Real dataset: CIC-IDS2017
+```bat
+py -3.11 -m venv .venv
+.venv\Scripts\activate
+```
 
-Official dataset information page:
-https://www.unb.ca/cic/datasets/ids-2017.html
+### 3. Install dependencies
 
-Download the **MachineLearningCSV** version, extract it, and copy all CSV files into:
+```bat
+pip install -r requirements.txt
+```
+
+Alternatively, Windows users can run:
+
+```text
+setup_windows.bat
+```
+
+---
+
+## Training on CIC-IDS2017
+
+After downloading and extracting `MachineLearningCSV.zip`, place the CSV files inside:
 
 ```text
 data/raw/
 ```
 
-Then double-click:
+The files may also remain inside a subfolder under `data/raw/`; the preparation script searches recursively.
+
+Then run:
 
 ```text
 train_real_cicids.bat
 ```
 
-By default, the preparation step keeps up to 5,000 records per broad attack family. This keeps training manageable on a normal student laptop while preserving multiple classes. You can later increase this value.
+The training pipeline performs:
 
-The preparation script groups detailed CICIDS labels into:
-- BENIGN
-- DDoS
-- DoS
-- PortScan
-- BruteForce
-- Bot
-- WebAttack
-- Infiltration
-- Heartbleed
+1. CIC-IDS2017 CSV discovery
+2. Label normalization
+3. Data cleaning
+4. Numerical feature selection
+5. Class balancing
+6. XGBoost training
+7. Autoencoder training on BENIGN traffic
+8. Model evaluation
+9. Model and report saving
+10. Streamlit dashboard startup
 
-(Only classes found in your downloaded CSVs will be used.)
+---
 
-## Run manually in VS Code / terminal
+## Manual Training
 
-From the project folder:
-
-```bat
-py -3.11 -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-python -m src.generate_demo_data --rows 6000
-python -m src.train_all --data data\demo\demo_network_traffic.csv --epochs 15
-streamlit run app.py
-```
-
-For real CICIDS data:
+The same process can be run manually:
 
 ```bat
 python -m src.prepare_cicids2017 --input-dir data\raw --max-per-class 5000
+```
+
+Then:
+
+```bat
 python -m src.train_all --data data\processed\cicids2017_prepared.csv --epochs 20
+```
+
+Start the dashboard:
+
+```bat
 streamlit run app.py
 ```
 
-## Command-line prediction
+The application will normally be available at:
 
-After training:
+```text
+http://localhost:8501
+```
+
+---
+
+## Using the Dashboard
+
+Open the **Analyze traffic** tab and upload a compatible network-flow CSV.
+
+The application:
+
+1. reads the uploaded traffic,
+2. aligns the required model features,
+3. runs XGBoost classification,
+4. calculates the autoencoder reconstruction error,
+5. flags anomalous records,
+6. assigns a risk level,
+7. displays traffic and risk distributions.
+
+The dashboard also provides record-level information such as:
+
+- predicted class,
+- classifier confidence,
+- anomaly score,
+- anomaly flag,
+- risk level.
+
+---
+
+## Command-Line Prediction
+
+A CSV can also be analyzed without the dashboard:
 
 ```bat
 python -m src.predict_csv data\demo\upload_sample.csv
 ```
 
-Predictions are written to `reports/predictions.csv`.
+Predictions are written to:
 
-## Important project honesty note
+```text
+reports/predictions.csv
+```
 
-Do **not** report metrics from the synthetic demo dataset on your resume. The demo data is deliberately easy and exists only to confirm that installation, training, inference and the dashboard work end to end. Use the real CIC-IDS2017 preparation/training flow for final metrics.
+---
 
-## Common Windows issues
+## Models
 
-### `py -3.11` is not recognized
-Install Python 3.11 and enable the Python launcher / PATH option.
+### XGBoost Classifier
 
-### XGBoost DLL error
-Install the current Microsoft Visual C++ Redistributable (x64), then reopen the terminal.
+XGBoost is used for supervised multi-class classification because CIC-IDS2017 provides labelled network-flow features.
 
-### PyTorch installation is large
-That is normal; the CPU package can still take substantial disk space. A GPU is not required for this project.
+The classifier learns patterns associated with known traffic classes such as DDoS, DoS, PortScan, Bot, and BruteForce.
 
-### Streamlit says model files are missing
-Run `run_demo.bat` once, or train on CICIDS using `train_real_cicids.bat`.
+### Autoencoder
 
-### CICIDS preparation says no CSV files were found
-Make sure you extracted the MachineLearningCSV ZIP and put the `.csv` files (not the ZIP itself) inside `data/raw/`.
+The autoencoder is trained using **BENIGN traffic only**.
 
-## Resume-safe description (after real training)
+It learns to reconstruct normal network behavior. During inference, traffic producing a reconstruction error above the learned threshold is marked as anomalous.
 
-**Network Intrusion Detection & Anomaly Monitoring System**  
-*Python, XGBoost, PyTorch, Scikit-learn, Streamlit, Plotly*
+This provides an additional signal that does not depend directly on the XGBoost attack label.
 
-- Built a network-flow intrusion detection pipeline using XGBoost to classify known attack patterns from labelled security traffic.
-- Implemented an autoencoder trained on benign traffic to flag anomalous network behavior using reconstruction error.
-- Developed an interactive dashboard for attack distribution, anomaly alerts, risk levels and CSV-based traffic analysis.
+---
 
-Replace/extend these bullets only with features and metrics you have actually run and verified.
+## Limitations
+
+- The current implementation analyzes pre-generated network-flow CSV files rather than capturing live packets.
+- Autoencoder anomaly recall is relatively low with the current threshold and can be improved through threshold tuning and architecture experimentation.
+- Results depend on the distribution and preprocessing of CIC-IDS2017 data.
+- The system should be treated as an experimental intrusion-detection pipeline rather than a production security product.
+
+---
+
+## Future Improvements
+
+Possible extensions include:
+
+- real-time packet or flow ingestion,
+- live alert generation,
+- improved anomaly-threshold calibration,
+- feature-importance visualization,
+- additional intrusion-detection datasets,
+- automated model comparison,
+- REST API integration,
+- deployment of the Streamlit dashboard.
+
+---
+
+## References
+
+- CIC-IDS2017 Dataset  
+  https://www.unb.ca/cic/datasets/ids-2017.html
+
+- XGBoost  
+  https://xgboost.readthedocs.io/
+
+- PyTorch  
+  https://pytorch.org/
+
+- Streamlit  
+  https://streamlit.io/
