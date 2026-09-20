@@ -102,13 +102,13 @@ The XGBoost classifier performs the primary known-attack classification. The aut
 
 ### Network Traffic Analysis Dashboard
 
-![Network Traffic Analysis Dashboard](Screenshots/ddos_analysis_dashboard.png)
+![Network Traffic Analysis Dashboard](Screenshots/ddos_analysis_dashboard.png.png)
 
 The dashboard above shows analysis of CIC-IDS2017 DDoS traffic, including predicted traffic classes, anomaly detection, and overall risk distribution.
 
 ### Model Summary
 
-![Model Summary](Screenshots/model_summary.png)
+![Model Summary](Screenshots/model_summary.png.png)
 
 The model summary displays the training configuration and evaluation results obtained from the processed CIC-IDS2017 dataset.
 
