@@ -18,13 +18,27 @@ A student-friendly cybersecurity project that combines:
 5. Combines classifier + anomaly signals into LOW/MEDIUM/HIGH risk.
 6. Shows results in a Streamlit dashboard and exports predictions.
 
-## Screenshots
+## Project Demo
 
-### 1. Model Summary
-![Model Summary](Screenshots/model_summary.png)
+### Network Traffic Analysis Dashboard
 
-### 2. DDoS Traffic Analysis Dashboard
-![DDoS Analysis Dashboard](Screenshots/ddos_analysis_dashboard.png)
+<p align="center">
+  <img src="Screenshots/ddos_analysis_dashboard.png" width="900">
+</p>
+
+<p align="center">
+  <i>Analysis of CIC-IDS2017 DDoS traffic showing attack classifications, anomaly detection and risk distribution.</i>
+</p>
+
+### Model Performance
+
+<p align="center">
+  <img src="Screenshots/model_summary.png" width="850">
+</p>
+
+<p align="center">
+  <i>Performance summary of the trained XGBoost classifier and PyTorch autoencoder.</i>
+</p>
 
 ## Folder structure
 
