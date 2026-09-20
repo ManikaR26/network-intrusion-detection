@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Large/raw data
+data/raw/*
+!data/raw/README.md
+data/processed/*
+!data/processed/.gitkeep
+
+# Generated reports
+reports/*.csv
+reports/*.json
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

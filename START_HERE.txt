@@ -1,0 +1,44 @@
+START HERE - WINDOWS (HINGLISH)
+================================
+
+PROJECT: Network Intrusion Detection & Anomaly Monitoring System
+
+PEHLI BAAR SIRF YE KARO:
+
+1) Is ZIP ko extract karo. Folder ko kisi simple location par rakho, e.g.
+   D:\Network_Intrusion_Project
+
+2) Python 3.11 (64-bit) installed hona chahiye.
+   Install karte waqt "Add Python to PATH" select karna.
+
+3) setup_windows.bat par double-click karo.
+   Ye .venv banayega aur required Python libraries install karega.
+
+4) Setup complete hone ke baad:
+   - run_dashboard.bat = bundled demo model seedha open karega
+   - run_demo.bat = demo ko khud se dubara train karke open karega
+
+   First understanding ke liye run_demo.bat chalana useful hai. Ye:
+   - demo network data generate karega
+   - XGBoost train karega
+   - Autoencoder train karega
+   - models save karega
+   - Streamlit dashboard kholega
+
+5) Browser me dashboard open hoga. "Run bundled demo sample" click karo.
+
+IMPORTANT:
+Demo data synthetic hai. Sirf project pipeline verify karne ke liye hai.
+Resume par demo ki accuracy/metrics MAT likhna.
+
+REAL PROJECT DATA KE LIYE:
+1) CIC-IDS2017 MachineLearningCSV download/extract karo.
+2) Saari .csv files data\raw\ folder me copy karo.
+3) train_real_cicids.bat run karo.
+4) Real training ke baad reports\training_metrics.json aur
+   reports\classification_report.csv me final metrics milenge.
+
+Dashboard dobara kholne ke liye: run_dashboard.bat
+Environment check ke liye: check_project.bat
+
+Agar error aaye to error ka screenshot bhejna; exact line ke hisaab se fix kiya ja sakta hai.
