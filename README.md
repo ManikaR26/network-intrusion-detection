@@ -27,7 +27,10 @@ A student-friendly cybersecurity project that combines:
 </p>
 
 <p align="center">
-  <i>Analysis of CIC-IDS2017 DDoS traffic showing attack classifications, anomaly detection and risk distribution.</i>
+  <i>
+    Analysis of CIC-IDS2017 DDoS traffic showing attack classifications,
+    anomaly detection, and risk distribution.
+  </i>
 </p>
 
 ### Model Performance
@@ -37,7 +40,10 @@ A student-friendly cybersecurity project that combines:
 </p>
 
 <p align="center">
-  <i>Performance summary of the trained XGBoost classifier and PyTorch autoencoder.</i>
+  <i>
+    Performance summary of the trained XGBoost classifier and
+    PyTorch autoencoder on the CIC-IDS2017 dataset.
+  </i>
 </p>
 
 ## Folder structure
