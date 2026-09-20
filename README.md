@@ -18,6 +18,14 @@ A student-friendly cybersecurity project that combines:
 5. Combines classifier + anomaly signals into LOW/MEDIUM/HIGH risk.
 6. Shows results in a Streamlit dashboard and exports predictions.
 
+## Screenshots
+
+### 1. Model Summary
+![Model Summary](Screenshots/model_summary.png)
+
+### 2. DDoS Traffic Analysis Dashboard
+![DDoS Analysis Dashboard](Screenshots/ddos_analysis_dashboard.png)
+
 ## Folder structure
 
 ```text
